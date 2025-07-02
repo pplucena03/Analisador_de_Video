@@ -1,21 +1,21 @@
-from ollama import chat, ChatResponse
+import os
+from dotenv import load_dotenv
+from openai import OpenAI
 
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
 
-def summarize_text(input_text):
+client = OpenAI(api_key=api_key)
 
-    prompt = f"""
-    Make a clean resume of this video's transcript. If it's in portuguese, return the resume in portguese.
-    Texto:
-    \"\"\"
-    {input_text}
-    \"\"\"
-    """
-
-    response: ChatResponse = chat(model='mistral', messages=[
-    {
-        'role': 'user',
-        'content': prompt,
-    },
-    ])
-    
-    print(response['message']['content'])
+def summarize_text(text):
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+                "role": "user",
+                "content": f"Resuma o seguinte texto no seu respectivo idioma:\n\n{text}"
+            }
+        ],
+    temperature=0.3
+)
+    return response.choices[0].message.content
