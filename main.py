@@ -1,6 +1,7 @@
 import downloader.audio_downloader as ad
 import transcriber.transcribe as tr
 import summarizer.summarize as su
+import outputs.file_remover as fr
 
 
 def main():
@@ -14,6 +15,8 @@ def main():
     resumo = su.summarize_text(transcrição)
     print(resumo)
 
+    fr.remove_file("./outputs/audio/")
+    
 
 if __name__ == "__main__":
     main()
